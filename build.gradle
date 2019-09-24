@@ -1,31 +1,43 @@
-//   http://ajoberstar.org/grgit/grgit-authentication.html
-//   http://ajoberstar.org/grgit/grgit-gradle.html
-// plugins {
-//   id 'org.ajoberstar.grgit' version '3.1.1' apply false
-// }
-// import org.ajoberstar.grgit.Grgit
-
-ext {
-    samples_via_https = 'https://github.com/corda/samples.git'
-    samples_via_ssh = 'git@github.com:corda/samples.git'
-    samples_dir ='lib/samples'
-}
 
 buildscript {
     repositories {
         jcenter()
     }
-    dependencies {
-        classpath 'org.ajoberstar.grgit:grgit-gradle:3.1.1'
-    }
+//  dependencies {
+//      classpath 'org.ajoberstar.grgit:grgit-gradle:3.1.1'
+//  }
 }
+
+//   http://ajoberstar.org/grgit/grgit-authentication.html
+//   http://ajoberstar.org/grgit/grgit-gradle.html
+plugins {
+  id 'org.ajoberstar.grgit' version '3.1.1' apply false
+}
+import org.ajoberstar.grgit.Grgit
+
+ext {
+    samples_via_https = 'https://github.com/corda/samples.git'
+    samples_via_ssh = 'git@github.com:corda/samples.git'
+    samples_dir ='lib/samples'
+    samples_getHEAD = false
+    samples_ref = '370ab9add057664b9651583cf8677955e40dd61f'
+}
+
 
 task cloneSamples {  // 38M	lib/samples/
     doFirst {
         delete "$samples_dir"
-        org.ajoberstar.grgit.Grgit.clone(dir: "$samples_dir", uri: "$samples_via_https")
+        Grgit.clone(dir: "$samples_dir", uri: "$samples_via_https")
+     // Grgit.clone(dir: "$samples_dir", uri: "$samples_via_https", checkout: "$samples_getHEAD", refToCheckout: "$samples_ref")
+        // println grgit.describe()
+    }
+    doLast {
+        def xx = Grgit.open(dir: "$samples_dir")
+        println xx.log(maxCommits: 4)
     }
 }
+
+// task checkSamples { }
 
 wrapper {
     gradleVersion = "4.10.3"
