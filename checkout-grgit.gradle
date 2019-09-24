@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         jcenter()
@@ -19,25 +18,20 @@ ext {
     samples_via_https = 'https://github.com/corda/samples.git'
     samples_via_ssh = 'git@github.com:corda/samples.git'
     samples_dir ='lib/samples'
-    samples_getHEAD = false
-    samples_ref = '370ab9add057664b9651583cf8677955e40dd61f'
+    samples_ref = '700d587'
 }
-
 
 task cloneSamples {  // 38M	lib/samples/
     doFirst {
         delete "$samples_dir"
         Grgit.clone(dir: "$samples_dir", uri: "$samples_via_https")
-     // Grgit.clone(dir: "$samples_dir", uri: "$samples_via_https", checkout: "$samples_getHEAD", refToCheckout: "$samples_ref")
-        // println grgit.describe()
     }
     doLast {
         def xx = Grgit.open(dir: "$samples_dir")
-        println xx.log(maxCommits: 4)
+        def log = xx.log(maxCommits: 16)
+        log.each { println "${it.abbreviatedId} ${it.dateTime} ${it.author.email}" }
     }
 }
-
-// task checkSamples { }
 
 wrapper {
     gradleVersion = "4.10.3"
