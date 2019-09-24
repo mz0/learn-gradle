@@ -1,3 +1,10 @@
+//   http://ajoberstar.org/grgit/grgit-authentication.html
+//   http://ajoberstar.org/grgit/grgit-gradle.html
+// plugins {
+//   id 'org.ajoberstar.grgit' version '3.1.1' apply false
+// }
+// import org.ajoberstar.grgit.Grgit
+
 ext {
     samples_via_https = 'https://github.com/corda/samples.git'
     samples_via_ssh = 'git@github.com:corda/samples.git'
@@ -13,7 +20,7 @@ buildscript {
     }
 }
 
-task samples {
+task cloneSamples {  // 38M	lib/samples/
     doFirst {
         delete "$samples_dir"
         org.ajoberstar.grgit.Grgit.clone(dir: "$samples_dir", uri: "$samples_via_https")
