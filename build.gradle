@@ -1,0 +1,26 @@
+ext {
+    samples_via_https = 'https://github.com/corda/samples.git'
+    samples_via_ssh = 'git@github.com:corda/samples.git'
+    samples_dir ='lib/samples'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.ajoberstar.grgit:grgit-gradle:3.1.1'
+    }
+}
+
+task samples {
+    doFirst {
+        delete "$samples_dir"
+        org.ajoberstar.grgit.Grgit.clone(dir: "$samples_dir", uri: "$samples_via_https")
+    }
+}
+
+wrapper {
+    gradleVersion = "4.10.3"
+    distributionType = Wrapper.DistributionType.ALL
+}
