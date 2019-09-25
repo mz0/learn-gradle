@@ -1,2 +1,8 @@
 /.gradle/
 /lib/samples/
+
+# ignore wrapper files
+/gradle/
+/gradlew
+/gradlew.bat
+
